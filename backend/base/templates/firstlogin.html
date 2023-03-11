@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GamersFirst</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+	<style>
+		body,
+		html {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+				background-image: url("https://www.teahub.io/photos/full/26-265214_download-pc-gaming-keyboard-monitor-computer-wallpapers-gaming.jpg");
+		}
+		.user_card {
+			width: 350px;
+			margin-top: auto;
+			margin-bottom: auto;
+			background:transparent;
+			position: centre;
+			display: flex;
+			justify-content: center;
+			flex-direction: column;
+			padding: 10px;
+
+		}
+		#messages{
+			background-color: red;
+			color: #fff;
+		}
+	</style>
+</head>
+<body>
+<div class="container h-100">
+		<div class="d-flex justify-content-center h-100">
+			<div class="user_card">
+				<div class="d-flex justify-content-center">
+					<h3 id="form-title">LOGIN</h3>
+				</div>
+				<div class="d-flex justify-content-center form_container">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        {{form.as_p}}
+						{% for message in messages %}
+						<p id="messages">{{message}}</p>
+						{% endfor %}
+                        <button class="btn btn-secondary">LOGIN</button>
+						<a href="{% url 'acceuil' %}" class="btn btn-secondary me-2">Cancel</a>
+                        <a href="{%url 'signup'%}" style="color:green">don't have an account ?</a>
+		                <br>
+                    </form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

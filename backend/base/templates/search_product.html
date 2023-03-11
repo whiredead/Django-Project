@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %} GamersFirst {% endblock %}
+{% block content %}
+<div class="container mt-3">
+    <strong>resultat de votre recherche: "{{cle}}" est:</strong>
+    <div class="row">
+        {% for element in produit %}
+            <div class="col-md-3">
+                <h2 style="color:rgb(255, 99, 71)">{{element.name}}</h2>
+                <br>
+                <a href="{% url 'detail' element.id%}"><img src="{{ element.image.url }}" width="270"></a>
+                <br>
+                <strong style="color:black;font-family:verdana;">{{element.price}} MAD</strong>
+                <br>
+                {%if element.countInStock == 0 %}
+                        <span class="badge bg-primary">Out of Stock</span>
+                    {% else %}
+                        <a href="{% url 'add_productcart' element.pk %}" class="btn btn-warning me-2"><b>Add To Cart</b></a>
+                    {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

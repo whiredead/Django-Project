@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block title %}GamersFirst{% endblock %}
+# detail of specific product
+{% block content %}
+
+<body>
+    <div class="container mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div id="demo" class="carousel slide" data-bs-ride="carousel">
+                        <!-- The slideshow/carousel -->
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="{{produits.image.url}}" class="d-block" style="width:100%">
+                            </div>
+                            {% for images in picture %}
+                                <div class="carousel-item">
+                                    <img src="{{images.image.url}}" class="d-block" style="width:100%">
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <!-- Left and right controls/icons -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" style="background-color:black;"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" style="background-color:black;"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <h1>Name : <i>{{produits.name}}</i></h1>
+                        <h4>sold : <i>{{produits.nbr_purchase}}</i> </h4>
+                    </div>
+                    <div class="row">
+                        <h4>Brand : <i>{{produits.brand}}</i> </h4>
+                        <hr>
+                    </div>
+                    <div class="row">
+                        <strong>DESCRIPTION : </strong>
+                        <br>
+                        <p>
+                            <ul>
+                                <strong>{{produits.description}}</strong>
+                            </ul>
+                        </p>
+                        <hr>
+                    </div>
+                    <div class="row">
+                        <h4>price: {{produits.price}} </h4>
+                    </div>
+                    <strong><i style="color: blue">Ships from Morocco</i>. Most customers receive in <i style="color: red">4 days</i></strong>
+                    <br><br>
+                    {%if produits.countInStock == 0 %}
+                        <span class="badge bg-primary">Out of Stock</span>
+                    {% else %}
+                        <bold>stock:</bold> <strong style="color:black;font-family:verdana;">{{produits.countInStock}}</strong>
+                        <br><br>
+                        {% if not user.is_superuser %}
+                            <a href="{% url 'add_productcart' produits.pk %}" class="btn btn-warning me-2"><b>Add To Cart</b></a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row mt-5">
+            <h2>Similar Products</h2>
+        </div>
+        <div class="row mt-5">
+            {% for pd in prodcat %}
+                <div class="col-md-3">
+                    <div class="card">
+                        <a href="{% url 'detail' pd.pk %}"><img class="card-img-top img-fluid" src="{{pd.image.url}}"></a>
+                        <div class="card-title">
+                            <h4>{{prod.name}}</h4>
+                        </div>
+                        <div class="card-text">
+                            <strong style="color:black;font-family:verdana;">{{pd.price}} </strong>
+                            <br>
+                            {%if pd.countInStock == 0 %}
+                                <br><button class="badge bg-danger">Out of Stock</button><br><br>
+                            {% else %}
+                                Quantity in stock: <strong style="color:black;font-family:verdana;">{{pd.countInStock}}</strong>
+                                <br><br>
+                                {% if not user.is_superuser %}
+                                    <a href="{% url 'add_productcart' pd.pk %}" class="btn btn-warning me-2"><b>Add To Cart</b></a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <br><br><br>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+{% endblock %}

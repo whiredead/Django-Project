@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% block title %} GamersFirst {% endblock %}
+{% block content %}
+{% for message in messages %}
+  <div class="alert alert-dismissible alert-success">
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <center><strong>{{message}}</strong></center>
+  </div>
+{% endfor %}
+<table class="table table-hover container" style='table-layout:fixed;'>
+  <thead>
+    <tr class="table-dark">
+      <th scope="col" style="text-align: center; vertical-align: middle;">product</th>
+      <th scope="col" style="text-align: center; vertical-align: middle;">name</th>
+      <th scope="col" style="text-align: center; vertical-align: middle;">Quantity</th>
+      <th scope="col" style="text-align: center; vertical-align: middle;">price</th>
+      <th style="text-align: center; vertical-align: middle;"> action </th>
+      <th style="text-align: center; vertical-align: middle;">buy now</th>
+      {% if orders %}
+        <th scope="col" style="text-align: center; vertical-align: middle;">
+          <ul class="nav-item dropdown">
+            <a class="btn btn-primary dropdown-toggle" href="#" data-bs-toggle="dropdown" data-bs-auto-close="outside">orders</a>
+            <ul class="dropdown-menu shadow">
+              {% if iterable == 1 %}
+                {% for order in orders %}
+                <li><a class="dropdown-item" href="{% url 'detailorder' order.id %}">order:{{order.id}}</a></li>
+                {%endfor%}
+              {% else %}
+                <li><a class="dropdown-item" href="{% url 'detailorder' orders.id %}">order:{{orders.id}}</a></li>
+              {% endif %}
+            </ul>
+          </ul>
+        </th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+  {% for prod in productofcart %}
+    <tr>
+      <td scope="row" style="text-align: center; vertical-align: middle;"><a href="{% url 'detail' prod.id_prod.pk %}"><img width="70%" src="{{prod.id_prod.image.url}}"></a></td>
+      <th scope="row" style="text-align: center; vertical-align: middle;">{{prod.id_prod.name}}</th>
+      <td style="text-align: center; vertical-align: middle;">{{prod.QuantityProd}}</td>
+      <td style="text-align: center; vertical-align: middle;">{{prod.TotalPrice}}</td>
+      <td style="text-align: center; vertical-align: middle;">
+        <a href="{% url 'drop' prod.id_prod.id %}" class="btn btn-danger"><b>Drop</b></a>
+        <a href="{% url 'add' prod.id_prod.id %}" class="btn btn-secondary"><b>Add</b></a>
+      </td>
+      <td></td>
+    </tr>
+  {%endfor%}
+  </tbody>
+    <tfooter >
+      <th style="text-align: center; vertical-align: middle;">Global Price</th>
+      <td style="text-align: center; vertical-align: middle;"></td>
+      <th style="text-align: center; vertical-align: middle;">{{Price}}</th>
+      <td></td>
+      <td style="text-align: center; vertical-align: middle;">
+        {% if productofcart %}
+          <a href="{% url 'dropall' idmycart %}" class="btn btn-danger"><b>Drop all</b></a>
+        {%endif%}
+      </td>
+      <td style="text-align: center; vertical-align: middle;">
+        {% if productofcart %}
+          <div id="paypal-button-container"></div>
+        {%endif%}
+      </td>
+    </tfooter>
+  </table>
+
+{% if productofcart %}
+    <script src="https://www.paypal.com/sdk/js?client-id=AZBox4IaW9L9iSICKHQVhDCpZe54gRhvp-A85iHXw2D3ZThgpTX5WMekkgQuW6C6rhmX3An5HBZrAiyB&currency=USD&disable-funding=credit,card"></script>
+    <script>
+      function getCookie(name) {
+		    var cookieValue = null;
+		    if (document.cookie && document.cookie !== '') {
+		        var cookies = document.cookie.split(';');
+		        for (var i = 0; i < cookies.length; i++) {
+		            var cookie = cookies[i].trim();
+		            // Does this cookie string begin with the name we want?
+		            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+		                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+		                break;
+		            }
+		        }
+		    }
+		    return cookieValue;
+	  }
+	  var csrftoken = getCookie('csrftoken');
+      function completeOrder(){
+	 		var url = "{% url 'complete' %}"
+	 		fetch(url, {
+	 			method:'POST',
+	 			headers:{
+	 				'Content-type':'application/json',
+	 				'X-CSRFToken':csrftoken,
+	 			},
+	 		})
+	  }
+
+      var total = '{{convert_price}}'
+
+      paypal.Buttons({
+
+      style: {
+                color:  'gold',
+                shape:  'pill',
+                label:  'buynow',
+                height: 40,
+            },
+
+
+        // Sets up the transaction when a payment button is clicked
+        createOrder: (data, actions) => {
+          return actions.order.create({
+            purchase_units: [{
+              amount: {
+                value: total
+              }
+            }]
+          });
+        },
+        onCancel: function (data,actions) {
+          alert('Transaction cancelled ');
+        },
+        onError: function (err) {
+          alert('SORRY :   ' +err);
+        },
+        // Finalize the transaction after payer approval
+
+        onApprove: function(data, actions) {
+                return actions.order.capture().then(function(details) {
+                    // Show a success message to the buyer
+                    completeOrder()
+                     alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                    window.location.href = "{% url 'acceuil' %}"
+                });
+        }
+
+      }).render('#paypal-button-container');
+    </script>
+{% endif %}
+{% endblock%}

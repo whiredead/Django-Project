@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %} GamersFirst {% endblock %}
+# same categorie product
+{% block content %}
+
+<div class="container mt-3">
+    <h1>{{categorie.name}}</h1>
+    <hr>
+    <div class="row">
+        {% for ele in produit %}
+            <div class="col-md-3">
+                <h2 style="color:rgb(255, 99, 71)">{{ele.name}}</h2>
+                <br>
+                <a href="{% url 'detail' ele.id %}"><img src="{{ ele.image.url }}" width="270"></a>
+                <br>
+                <strong style="color:black;font-family:verdana;">{{ele.price}} </strong>
+                <br>
+                {%if ele.countInStock == 0 %}
+                        <span class="badge bg-primary">Out of Stock</span>
+                    {% else %}
+                        <a href="{% url 'add_productcart' ele.pk %}" class="btn btn-warning me-2"><b>Add To Cart</b></a>
+                    {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

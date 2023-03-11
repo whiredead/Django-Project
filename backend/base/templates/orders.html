@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %} GamersFirst {% endblock %}
+{% block content %}
+  <style>
+    table.tb { border-collapse: collapse; width:300px; }
+    .tb th, .tb td { padding: 5px; border: solid 1px #777; }
+    .tb th { background-color: lightblue;}
+  </style>
+
+    <table class="table table-hover container" style='table-layout:fixed;'>
+    <caption>Order Number : {{order.id}}</caption>
+      <thead>
+        <tr class="table-dark">
+          <th scope="col" style="text-align: center; vertical-align: middle;">product</th>
+          <th scope="col" style="text-align: center; vertical-align: middle;">name</th>
+          <th scope="col" style="text-align: center; vertical-align: middle;">Quantity</th>
+          <th scope="col" style="text-align: center; vertical-align: middle;">price</th>
+        </tr>
+      </thead>
+      {% for prod in product %}
+          <tbody>
+            <tr>
+              <td scope="row" style="text-align: center; vertical-align: middle;"><a href="{% url 'detail' prod.id_prod.pk %}"><img width="70%" src="{{prod.id_prod.image.url}}"></a></td>
+              <th scope="row" style="text-align: center; vertical-align: middle;">{{prod.id_prod.name}}</th>
+              <td style="text-align: center; vertical-align: middle;">{{prod.QuantityProd}}</td>
+              <td style="text-align: center; vertical-align: middle;">{{prod.TotalPrice}}</td>
+            </tr>
+          </tbody>
+      {%endfor%}
+      <tfooter>
+        <th style="text-align: center; vertical-align: middle;">Global Price</th>
+        <th style="text-align: center; vertical-align: middle;">{{order.TotalPrice}}</th>
+        <th style="text-align: center; vertical-align: middle;">Estimated delivery date</th>
+        <th style="text-align: center; vertical-align: middle;">{{order.DeliveryDate}}</th>
+      </tfooter>
+    </table>
+<script>
+  let toggle = button => {
+    let element = document.getElementById("mytable");
+    let hidden = element.getAttribute("hidden");
+
+    if (hidden) {
+       element.removeAttribute("hidden");
+       button.innerText = "Hide table";
+    } else {
+       element.setAttribute("hidden", "hidden");
+       button.innerText = "Show table";
+    }
+  }
+</script>
+{% endblock%}

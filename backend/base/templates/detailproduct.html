@@ -1,0 +1,85 @@
+#### delete #######
+{% extends 'base.html' %}
+{% block title %}GamersFirst{% endblock %}
+{% block content %}
+    <body>
+        <div class="container">
+            <table style="width:100%">
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="row">
+                                <div id="demo" class="carousel slide" data-bs-ride="carousel">
+                                    <!-- The slideshow/carousel -->
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <img src="{{produits.image.url}}" class="d-block" style="width:100%">
+                                        </div>
+                                        {% for images in picture %}
+                                            <div class="carousel-item">
+                                                <img src="{{images.image.url}}" class="d-block" style="width:100%">
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <!-- Left and right controls/icons -->
+                                    <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" style="background-color:black;"></span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" style="background-color:black;"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td style="width:10%"></td>
+
+                        <td style="width:50%">
+                            <div class="col-md-6">
+                                <h4>{{produits.name}}</h4>
+                                <h4>Brand: {{produits.brand}}</h4>
+                                <hr>
+                                <strong>DESCRIPTION:</strong>
+                                <br>
+                                <p><i><strong>{{produits.description}}</strong></i></p>
+                                <br>
+                                <h4>price: {{produits.price}} </h4>
+                                <br>
+                                {%if produits.countInStock == 0 %}
+                                    <span class="badge bg-primary">Out of Stock</span>
+                                {% else %}
+                                    Quantity in stock: <strong style="color:black;font-family:verdana;">{{produits.countInStock}}</strong>
+                                    <br><br>
+                                    {% if not user.is_superuser %}
+                                        <a href="{% url 'add_productcart' produits.pk %}" class="btn btn-warning me-2"><b>Add To Cart</b></a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <div class="col-md-3">
+                            {% for prod in prodcat %}
+                                <td>
+                                    <h2 style="color:rgb(255, 99, 71)">{{prod.name}}</h2>
+                                    <br>
+                                    <a href="{% url 'detail' prod.id %}"><img src="{{ prod.image.url }}" width="270"></a>
+                                    <br>
+                                    <strong style="color:black;font-family:verdana;">{{prod.price}} MAD</strong>
+                                    <br>
+                                    {%if ele.countInStock == 0 %}
+                                        <span class="badge bg-primary">Out of Stock</span>
+                                    {% else %}
+                                        <a href="{% url 'add_productcart' prod.pk %}" class="btn btn-warning me-2"><b>Add To Cart</b></a>
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </div>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </body>
+{% endblock %}

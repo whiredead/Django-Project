@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>GamersFirst</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+		{% load static %}
+		<link rel="stylesheet" href="{% static 'LOG.css' %}">
+	</head>
+	<body>
+		<div class="login-wrap" >
+			<div class="login-html">
+				<input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Shipment Address</label>
+				<input id="tab-2" type="hidden" name="tab" class="sign-up"><label for="tab-2" class="tab"></label>
+				<div class="login-form">
+					<div class="sign-in-htm">
+							<p>{{msg}}</p>
+						<form method="POST" action="{% url 'address' %}">
+							{% csrf_token %}
+							<div class="group">
+								<label class="label">address_1</label>
+								<input id="user" type="text" class="input" name="address_1" required>
+							</div>
+							<div class="group">
+								<label class="label">address_2</label>
+								<input id="pass" type="text" class="input" name="address_2">
+							</div>
+							<div class="group">
+								<label class="label">zip_code</label>
+								<input id="pass" type="number" class="input" name="zip_code" required>
+							</div>
+							<div class="group">
+								<label class="label">city</label>
+								<input id="pass" type="text" class="input" name="city" required>
+							</div>
+							<div class="group">
+								<label class="label">country</label>
+								<input id="pass" type="text" class="input" name="country" required>
+							</div>
+							<div class="group">
+								<input type="submit" class="button" value="submit address" name="btnaddress">
+								<br><br>
+							</div>
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
